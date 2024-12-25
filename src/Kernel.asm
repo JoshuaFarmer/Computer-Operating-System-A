@@ -412,10 +412,6 @@ system:
 	; call str_cmp
 	; jc idisk
 
-	mov si, dat.run
-	call str_cmp
-	jc IO
-
 	mov si, dat.cls
 	call str_cmp
 	jc icls
@@ -431,12 +427,15 @@ system:
 	mov si, dat.shutdown
 	call str_cmp
 	jc restart
+
+	mov si, KeyBoardBuffer
+	call _RUN_FILE
 	ret
 
 kernel_mainloop:
 	sti
+	mov di, KeyBoardBuffer
 	call clearBuffer
-	
 	mov di, dat.prompt
 	call puts
 	

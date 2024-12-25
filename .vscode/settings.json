@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.asm": "asm-intel-x86-generic",
+		"*.w32asm": "asm-joshua-w32-generic",
+		"*.qoppa": "qoppa",
+		"stdlib.h": "c"
+	}
+}

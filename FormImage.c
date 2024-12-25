@@ -2,11 +2,11 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #pragma pack(1)
 
 typedef struct 
 {
-	char  Reserved[8];
 	char  Sign[7];
 	short Entry;
 	short Version;
@@ -14,9 +14,24 @@ typedef struct
 	char  Reserved2[5];
 	char  Magic;
 	short Origin; // Ignored
-	char  Name[8];
-	char  First[512-37];
+	char  NameLen;
+	char  NameAndFirst[512-(17)];
 } Header;
+
+Header construct_header(const char* name, size_t size)
+{
+	Header h;
+	h.NameLen = strlen(name);
+	h.Magic = 0xAA;
+	h.Sectors = size/512;
+	h.Version = 2;
+	memcpy(h.Sign, "COSA E", 7);
+	memcpy(h.NameAndFirst, name, h.NameLen);
+	FILE* fp = fopen(name, "rb");
+	fread(h.NameAndFirst+h.NameLen, 1, 512, fp);
+	fclose(fp);
+	return h;
+}
 
 int main(int argc, char **argv)
 {
@@ -44,6 +59,11 @@ int main(int argc, char **argv)
 			fread((void*)&buff, sizeof(Header), 1, File);
 			fwrite((void*)&buff, sizeof(Header), 1, Image);
 		}
+
+		printf("FILE: "); 
+		for (int u = 0; u < buff.NameLen; ++u)
+			printf("%c",buff.NameAndFirst[u]);
+		printf("; WITH SIZE %d\n", buff.Sectors*512);
 
 		fclose(File);
 	}

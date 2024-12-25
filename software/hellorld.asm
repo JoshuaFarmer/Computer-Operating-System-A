@@ -1,5 +1,5 @@
-	define FILENAMEL 7
-	define FILENAME "Example"
+	define FILENAME "Hello"
+	define FILENAMEL 5
 	include "headers/header_v2.asm"
 
 start:
@@ -8,7 +8,7 @@ start:
 	int 0x80
 	retf
 msg:
-	db "Hello, World!", 10, 13, 0
+	db "Hellorld!", 10, 13, 0
 
 times 512-($-$$) db 0
 end_of_prog:
